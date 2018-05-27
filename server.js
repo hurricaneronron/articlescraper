@@ -25,6 +25,10 @@ app.use(bodyparser.json())
 // routes
 app.get('/', function (req, res) {
   res.render('index.hbs')
+  db.article.find({}, function(e, r) {
+    if(e) throw e
+    
+  })
 })
 
 app.post('/articles/new', function (req, res) {
@@ -37,10 +41,15 @@ app.post('/articles/new', function (req, res) {
       console.log(title)
       console.log(link)
       console.log(summary)
-      db.article.create({
-        title: title,
-        link: link,
-        summary: summary
+      db.article.find({'title': title}, function(e, r) {
+        if(e) throw e
+        if(!title) {
+          db.article.create({
+            title: title,
+            link: link,
+            summary: summary
+          })
+        }
       })
     })
   })
