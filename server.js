@@ -4,11 +4,11 @@ var bodyparser = require('body-parser')
 var path = require('path')
 var morgan = require('morgan')
 var expresshbs = require('express-handlebars')
-var mongoose = require("mongoose")
-var cheerio = require("cheerio")
-var request = require("request")
+var mongoose = require('mongoose')
+var cheerio = require('cheerio')
+var request = require('request')
 
-mongoose.connect('mongodb://localhost/nytDB')
+mongoose.connect('mongodb://localhost/nytArticlesDb')
 var db = require('./models')
 
 // new express app
@@ -37,10 +37,11 @@ app.post('/articles/new', function (req, res) {
       console.log(title)
       console.log(link)
       console.log(summary)
-      // db.article.create({
-      //   title: title,
-      //   link: link
-      // })
+      db.article.create({
+        title: title,
+        link: link,
+        summary: summary
+      })
     })
   })
 })
