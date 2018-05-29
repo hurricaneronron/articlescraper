@@ -3,7 +3,7 @@ var express = require('express')
 var bodyparser = require('body-parser')
 var path = require('path')
 var morgan = require('morgan')
-var expresshbs = require('express-handlebars')
+var hbs = require('express-handlebars')
 var mongoose = require('mongoose')
 var cheerio = require('cheerio')
 var request = require('request')
@@ -16,7 +16,7 @@ var app = express()
 
 // middleware
 app.use(morgan('dev'))
-app.engine('hbs', expresshbs({defaultLayout: 'main', extname: '.hbs'}))
+app.engine('hbs', hbs({defaultLayout: 'main', extname: '.hbs'}))
 app.set('view engine', 'hbs')
 app.use(express.static(path.join(__dirname, '/public/')))
 app.use(bodyparser.urlencoded({ extended: true }))
@@ -25,9 +25,13 @@ app.use(bodyparser.json())
 // routes
 app.get('/', function (req, res) {
   res.render('index.hbs')
+})
+
+app.get('/articles', function (req, res) {
   db.article.find({}, function(e, r) {
-    if(e) throw e
-    
+    console.log(r)
+  }).catch(function(e) {
+    console.log(e)
   })
 })
 
@@ -41,15 +45,10 @@ app.post('/articles/new', function (req, res) {
       console.log(title)
       console.log(link)
       console.log(summary)
-      db.article.find({'title': title}, function(e, r) {
-        if(e) throw e
-        if(!title) {
-          db.article.create({
-            title: title,
-            link: link,
-            summary: summary
-          })
-        }
+      db.article.create({
+        title: title,
+        link: link,
+        summary: summary
       })
     })
   })
