@@ -32,14 +32,6 @@ app.get('/', function (req, res) {
   })
 })
 
-app.get('/articles', function (req, res) {
-  db.article.find({}, function(e, r) {
-    console.log(r)
-  }).catch(function(e) {
-    console.log(e)
-  })
-})
-
 app.post('/articles/new', function (req, res) {
   request('https://www.nytimes.com/section/world', function (e, r, html) {
     var $ = cheerio.load(html)
@@ -50,10 +42,16 @@ app.post('/articles/new', function (req, res) {
       console.log(title)
       console.log(link)
       console.log(summary)
-      db.article.create({
-        title: title,
-        link: link,
-        summary: summary
+      db.article.find({title: title}, function (e, r) {
+        if(r.length === 0) {
+          db.article.create({
+            title: title,
+            link: link,
+            summary: summary
+          })
+        }
+      }).catch(function(e) {
+        console.log(e)
       })
     })
   })
