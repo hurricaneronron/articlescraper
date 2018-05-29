@@ -24,7 +24,18 @@ app.use(bodyparser.json())
 
 // routes
 app.get('/', function (req, res) {
-  res.render('index.hbs')
+  db.article.find({}, function(e, r) {
+    console.log(r)
+    res.render('index.hbs', {
+      articles: r
+      // title: r.title,
+      // summary: r.summary,
+      // link: r.link
+    })
+  }).catch(function(e) {
+    console.log(e)
+  })
+
 })
 
 app.get('/articles', function (req, res) {

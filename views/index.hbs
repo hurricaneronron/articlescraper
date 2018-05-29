@@ -18,6 +18,10 @@
   </div>
 </div>
 <div class="container-fluid article-container">
+  {{#each articles}}
+  <a href="{{this.link}}" target="_blank">{{this.title}}</a>
+  <p>{{this.summary}}</p>
+  {{/each}}
 </div>
 
 <footer class="footer">
