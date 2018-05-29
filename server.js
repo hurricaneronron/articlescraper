@@ -26,16 +26,10 @@ app.use(bodyparser.json())
 app.get('/', function (req, res) {
   db.article.find({}, function(e, r) {
     console.log(r)
-    res.render('index.hbs', {
-      articles: r
-      // title: r.title,
-      // summary: r.summary,
-      // link: r.link
-    })
+    res.render('index.hbs', {articles: r})
   }).catch(function(e) {
     console.log(e)
   })
-
 })
 
 app.get('/articles', function (req, res) {
